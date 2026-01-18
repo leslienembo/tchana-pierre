@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tchana Pierre</title>
+
+    <style>
+      /* --------------------
+         GLOBAL RESET
+      -------------------- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        overflow-x: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f3f3f3;
+        color: #000;
+      }
+
+      /* --------------------
+         PAGE LAYOUT
+      -------------------- */
+      .page {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 48px 48px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        min-height: 100vh;
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      h1 {
+        font-size: 56px;
+        font-weight: 700;
+        letter-spacing: -0.08em;
+        transform: scaleY(1.2);
+      }
+
+      nav {
+        display: flex;
+        gap: 48px;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #514e4e;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        font-size: 12px;
+      }
+
+      /* --------------------
+         CONTENT ROW
+      -------------------- */
+      .content-row {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      /* --------------------
+         IMAGE
+      -------------------- */
+      .hero {
+        width: 100%;
+        background-image: url("art/self-2024.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 520px;
+      }
+
+      /* --------------------
+         BIO
+      -------------------- */
+      .bio {
+        max-width: 720px;
+        color: #b5aaaa;
+        font-size: 16px;
+        line-height: 1.2;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* --------------------
+         FOOTER
+      -------------------- */
+      .footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        padding-top: 40px;
+        font-weight: 600;
+      }
+
+      .footer a {
+        text-decoration: none;
+        color: #514e4e;
+      }
+
+      /* --------------------
+         iPAD LANDSCAPE + DESKTOP
+      -------------------- */
+      @media (min-width: 1024px) {
+        .content-row {
+          flex-direction: row;
+          align-items: stretch;
+          gap: 80px;
+        }
+
+        .hero {
+          flex: 1;
+          height: 420px;
+        }
+
+        .bio {
+          flex: 1;
+          max-width: 480px;
+          justify-content: flex-end;
+        }
+      }
+
+      /* --------------------
+         LARGE DESKTOP
+      -------------------- */
+      @media (min-width: 1200px) {
+        h1 {
+          font-size: 64px;
+        }
+
+        nav {
+          gap: 62px;
+        }
+
+        .hero {
+          height: 480px;
+        }
+      }
+
+      /* --------------------
+         TABLETS (PORTRAIT)
+      -------------------- */
+      @media (max-width: 1024px) {
+        .page {
+          padding: 40px 32px 24px;
+        }
+
+        h1 {
+          font-size: 48px;
+        }
+
+        nav {
+          gap: 32px;
+        }
+
+        .hero {
+          height: 460px;
+        }
+      }
+
+      /* --------------------
+         iPHONE 15 PRO + SMALLER
+      -------------------- */
+      @media (max-width: 480px) {
+        .page {
+          padding: 28px 20px 20px;
+          gap: 32px;
+        }
+
+        h1 {
+          font-size: 30px;
+        }
+
+        nav {
+          gap: 20px;
+        }
+
+        .content-row {
+          flex-direction: column;
+        }
+
+        .hero {
+          height: 45vh;
+          order: -1; /* IMAGE FIRST */
+        }
+
+        .bio {
+          font-size: 15px;
+          justify-content: flex-start;
+          order: 1;
+        }
+
+        .footer {
+          font-size: 14px;
+        }
+      }
+
+      /* --------------------
+         VERY SMALL DEVICES
+      -------------------- */
+      @media (max-width: 360px) {
+        nav {
+          gap: 14px;
+        }
+
+        nav a {
+          font-size: 10px;
+        }
+
+        .bio {
+          font-size: 14px;
+        }
+
+        .hero {
+          height: 40vh;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page">
+      <header>
+        <h1>TCHANA PIERRE</h1>
+
+        <nav>
+          <a href="/paintings.html">PAINTINGS</a>
+          <a href="/sculpture.html">SCULPTURE</a>
+          <a href="/visual-media.html">VISUAL MEDIA</a>
+          <a href="/notes.html">NOTES</a>
+        </nav>
+      </header>
+
+      <section class="content-row">
+        <section class="bio">
+          <p>
+            Tchana Pierre is a Boston based artist whose work delves into the
+            physical and psychological effects of human emotions on the mind and
+            body. Through his art, Pierre explores how feelings such as love,
+            joy, anxiety, grief and lust manifest within us shaping our
+            perceptions, behaviors and physical forms. Working primarily in
+            acrylic and film, Pierre combines figuration and abstraction to
+            challenge the viewer's understanding of the real and pseudo-real.
+          </p>
+
+          <p>contact --- tchanapierre@gmail.com</p>
+        </section>
+
+        <section class="hero"></section>
+      </section>
+
+      <footer class="footer">
+        <a href="/tchana-pierre-cv.md">cv</a>
+        <a href="/tchana-pierre-terms.md">terms</a>
+      </footer>
+    </main>
+  </body>
+</html>
