@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tchana Pierre — Paintings</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f3f3;
+  color: #000;
+}
+
+/* ==================== DESKTOP BASE (default) ==================== */
+
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 48px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+header { display: flex; flex-direction: column; gap: 28px; }
+
+h1 {
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: -0.08em;
+  transform: scaleY(1.2);
+}
+
+nav {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+nav a.active { color: #0b35ff; }
+
+/* -------------------- GALLERY -------------------- */
+
+.gallery {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.painting-frame {
+  width: 92%;
+  max-width: 1000px;
+  aspect-ratio: 16 / 10;
+  background: #f3f3f3;
+}
+
+.painting-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 300;
+  cursor: pointer;
+  user-select: none;
+}
+
+.arrow.left { left: 0; }
+.arrow.right { right: 0; }
+
+/* -------------------- INFO -------------------- */
+
+.info {
+  width: 92%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title { font-size: 22px; }
+.meta { font-size: 16px; }
+.availability { font-size: 14px; }
+
+/* ==================== iPAD SCREENS ==================== */
+
+@media (max-width: 1024px) {
+  h1 { font-size: 46px; }
+  .painting-frame { aspect-ratio: 4 / 3; }
+}
+
+/* ==================== iPHONE 15 & PHONES ==================== */
+
+@media (max-width: 480px) {
+  .page { padding: 28px 10px 10px; gap: 36px; }
+  h1 { font-size: 32px; }
+  nav { gap: 20px; }
+  .painting-frame { height: 50vh; aspect-ratio: unset; }
+  .title { font-size: 20px; }
+}
+
+/* ==================== SMALLER THAN iPHONE 15 ==================== */
+
+@media (max-width: 340px) {
+  h1 { font-size: 26px; }
+  nav { gap: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+<header>
+  <h1>TCHANA PIERRE</h1>
+  <nav>
+    <a class="active" href="paintings.html">PAINTINGS</a>
+    <a href="sculpture.html">SCULPTURE</a>
+    <a href="visual-media.html">VISUAL MEDIA</a>
+    <a href="#">NOTES</a>
+  </nav>
+</header>
+
+<section class="gallery">
+  <div class="arrow left" onclick="prevPainting()">&lt;</div>
+  <div class="painting-frame">
+    <img id="mainImage">
+  </div>
+  <div class="arrow right" onclick="nextPainting()">&gt;</div>
+</section>
+
+<section class="info">
+  <div class="title" id="title"></div>
+  <div class="meta" id="meta"></div>
+  <div class="availability" id="availability"></div>
+</section>
+
+</main>
+
+<script>
+const paintings = [
+  { title:"Too Much Joy Is Lost in Our Desparation to Keep It", meta:"acrylic and pastel on paper, 36 x 24 in (2025)", availability:"private collection", image:"/art/too-much-joy-is-lost-in-our-desparation-to-keep-it.jpg"},
+  { title:"La nuit a ouvert mes yeux", meta:"acrylic and pastel on paper, 36 x 48 in (2025)", availability:"private collection", image:"/art/la-nuit-a-ouvert-mes-yeux.jpg"},
+  { title:"And then we dance", meta:"acrylic and pastel on canvas, 30 x 60 in (2024)", availability:"contact for price", image:"/art/and-then-we-dance.jpg"},
+  { title:"Self II", meta:"acrylic and pastel on canvas, 40 x 30 in (2025)", availability:"contact for price", image:"/art/Self-II.jpg"},
+  { title:"Self", meta:"acrylic on canvas, 24 x 18 in (2022)", availability:"private collection", image:"/art/self-2024.jpg"},
+  { title:"Three Figures At A Dinner Table", meta:"acrylic on canvas, 18 x 24 in (2022)", availability:"private collection", image:"/art/Three_Figures_At_A_Dinner_Table.jpg"},
+  { title:"Boxeur", meta:"acrylic on cardboard, 40 x 40 in (2021)", availability:"private collection", image:"/art/boxeur.jpg"},
+  { title:"Motoboy", meta:"acrylic on cardboard, 40 x 40 in (2021)", availability:"private collection", image:"/art/Motoboy.jpg"}
+];
+
+let index = 0;
+
+function renderPainting(){
+  const p = paintings[index];
+  mainImage.src = p.image;
+  title.textContent = p.title;
+  meta.textContent = p.meta;
+  availability.textContent = p.availability;
+}
+
+function nextPainting(){ index=(index+1)%paintings.length; renderPainting(); }
+function prevPainting(){ index=(index-1+paintings.length)%paintings.length; renderPainting(); }
+
+renderPainting();
+</script>
+
+</body>
+</html>
