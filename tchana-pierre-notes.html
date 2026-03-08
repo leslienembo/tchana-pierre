@@ -104,12 +104,21 @@ nav a.active { color: #0b35ff; }
   height: 20vh;
   background: #dfdfdf;
   border: 3px solid #4a97ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gallery img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  display: block;
+}
+
+.gallery .no-images {
+  font-size: 13px;
+  color: #999;
 }
 
 .gallery .arrow {
@@ -120,10 +129,21 @@ nav a.active { color: #0b35ff; }
   font-weight: 300;
   cursor: pointer;
   user-select: none;
+  z-index: 2;
+  padding: 4px;
+  background: rgba(255,255,255,0.7);
 }
 
 .gallery .left { left: -14px; }
 .gallery .right { right: -14px; }
+
+.gallery .counter {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 11px;
+  color: #555;
+}
 
 /* ----- Text + PDF ----- */
 
@@ -178,8 +198,8 @@ nav a.active { color: #0b35ff; }
 
 <header>
   <h1>
-  <a href="/index.html" class="site-title">TCHANA PIERRE</a>
-</h1>
+    <a href="/index.html" class="site-title">TCHANA PIERRE</a>
+  </h1>
   <nav>
     <a href="/tchana-pierre-paintings.html">PAINTINGS</a>
     <a href="/tchana-pierre-sculpture.html">SCULPTURE</a>
@@ -191,25 +211,31 @@ nav a.active { color: #0b35ff; }
 <section class="notes">
 
   <!-- NOTE A -->
-  <div class="note">
+  <div class="note" data-note="0">
     <div class="note-title" onclick="toggleNote(0)">
       WINTER 26 partA: Denim Denim Denim
     </div>
-    <div class="dropdown"></div>
+    <div class="dropdown">
+      <div class="gallery">
+        <span class="arrow left" onclick="prevImage(event, 0)">&#60;</span>
+        <img src="" alt="Gallery Image" />
+        <span class="arrow right" onclick="nextImage(event, 0)">&#62;</span>
+        <span class="counter"></span>
+      </div>
+    </div>
   </div>
 
   <!-- NOTE B -->
-  <div class="note">
+  <div class="note" data-note="1">
     <div class="note-title" onclick="toggleNote(1)">
       Indriect Free Association
     </div>
-
     <div class="dropdown">
       <div class="gallery">
-        <span class="arrow left" onclick="prevImage(event)">&#60;</span>
-        <a href="/notes/OIKTPIHY01.JPG" alt="Gallery Image" />
-        <span class="arrow right" onclick="nextImage(event)">&#62;</span>
-        <a href="/notes/blueNude.jpg" alt="Gallery Image" />
+        <span class="arrow left" onclick="prevImage(event, 1)">&#60;</span>
+        <img src="" alt="Gallery Image" />
+        <span class="arrow right" onclick="nextImage(event, 1)">&#62;</span>
+        <span class="counter"></span>
       </div>
 
       <div class="note-content">
@@ -245,7 +271,7 @@ encounters in real time. This structure will be
 supported through durational movement,
 carefully controlled sightliness, and a deliberately
 sparse soundscape designed to heighten
-awareness of the performers’ labor and embodied
+awareness of the performers' labor and embodied
 presence. By imposing a controlled flow within
 the space, the work will interrupt passive modes
 of viewing and instead demand an intentional engagement with the politics of looking and the aesthetics of embodiment.
@@ -258,11 +284,18 @@ Indirect Free Association will operate simultaneously as a live action and a con
   </div>
 
   <!-- NOTE C -->
-  <div class="note">
+  <div class="note" data-note="2">
     <div class="note-title" onclick="toggleNote(2)">
       WINTER 26 partC: Denim Denim Denim
     </div>
-    <div class="dropdown"></div>
+    <div class="dropdown">
+      <div class="gallery">
+        <span class="arrow left" onclick="prevImage(event, 2)">&#60;</span>
+        <img src="" alt="Gallery Image" />
+        <span class="arrow right" onclick="nextImage(event, 2)">&#62;</span>
+        <span class="counter"></span>
+      </div>
+    </div>
   </div>
 
 </section>
@@ -270,60 +303,91 @@ Indirect Free Association will operate simultaneously as a live action and a con
 </main>
 
 <script>
+// Image sets per note index — replace placeholder URLs with your real image paths
 const imageSets = [
-  [],
   [
-    "https://via.placeholder.com/1400x900?text=Denim+Image+1",
-    "https://via.placeholder.com/1400x900?text=Denim+Image+2",
-    "https://via.placeholder.com/1400x900?text=Denim+Image+3"
+    // Note 0 images — add your paths here e.g. "/notes/imageA1.jpg"
   ],
-  []
+  [
+    "/notes/OIKTPIHY01.JPG",
+    "/notes/blueNude.jpg"
+  ],
+  [
+    // Note 2 images — add your paths here
+  ]
 ];
 
-let activeNote = null;
-let imageIndex = 0;
+// Track current image index per note
+const imageIndices = imageSets.map(() => 0);
 
 function toggleNote(index) {
   const notes = document.querySelectorAll(".note");
-  const titles = document.querySelectorAll(".note-title");
 
   notes.forEach((note, i) => {
     const dropdown = note.querySelector(".dropdown");
-    const title = titles[i];
+    const title = note.querySelector(".note-title");
 
-    if (i === index && dropdown.innerHTML !== "") {
+    if (i === index) {
       const isOpen = dropdown.style.display === "flex";
       dropdown.style.display = isOpen ? "none" : "flex";
       title.classList.toggle("active", !isOpen);
-      activeNote = isOpen ? null : index;
+      if (!isOpen) {
+        imageIndices[i] = 0;
+        updateImage(i);
+      }
     } else {
       dropdown.style.display = "none";
       title.classList.remove("active");
     }
   });
-
-  imageIndex = 0;
-  updateImage();
 }
 
-function updateImage() {
-  if (activeNote === null) return;
-  const img = document.querySelectorAll(".dropdown")[activeNote]?.querySelector("img");
-  if (img && imageSets[activeNote].length) {
-    img.src = imageSets[activeNote][imageIndex];
+function updateImage(noteIndex) {
+  const note = document.querySelector(`.note[data-note="${noteIndex}"]`);
+  if (!note) return;
+
+  const gallery = note.querySelector(".gallery");
+  const img = gallery.querySelector("img");
+  const counter = gallery.querySelector(".counter");
+  const images = imageSets[noteIndex];
+
+  if (!images || images.length === 0) {
+    img.style.display = "none";
+    // Show placeholder text if no images
+    let placeholder = gallery.querySelector(".no-images");
+    if (!placeholder) {
+      placeholder = document.createElement("span");
+      placeholder.className = "no-images";
+      placeholder.textContent = "No images";
+      gallery.insertBefore(placeholder, counter);
+    }
+    counter.textContent = "";
+    return;
   }
+
+  // Hide placeholder if images exist
+  const placeholder = gallery.querySelector(".no-images");
+  if (placeholder) placeholder.remove();
+
+  img.style.display = "block";
+  img.src = images[imageIndices[noteIndex]];
+  counter.textContent = `${imageIndices[noteIndex] + 1} / ${images.length}`;
 }
 
-function nextImage(e) {
+function nextImage(e, noteIndex) {
   e.stopPropagation();
-  imageIndex = (imageIndex + 1) % imageSets[1].length;
-  updateImage();
+  const images = imageSets[noteIndex];
+  if (!images || images.length === 0) return;
+  imageIndices[noteIndex] = (imageIndices[noteIndex] + 1) % images.length;
+  updateImage(noteIndex);
 }
 
-function prevImage(e) {
+function prevImage(e, noteIndex) {
   e.stopPropagation();
-  imageIndex = (imageIndex - 1 + imageSets[1].length) % imageSets[1].length;
-  updateImage();
+  const images = imageSets[noteIndex];
+  if (!images || images.length === 0) return;
+  imageIndices[noteIndex] = (imageIndices[noteIndex] - 1 + images.length) % images.length;
+  updateImage(noteIndex);
 }
 </script>
 
